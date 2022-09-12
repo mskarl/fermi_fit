@@ -23,7 +23,7 @@ my_source = fermi.Source(source_name, ra,  dec, data_dir=args.data_dir, output_d
 
 # get data. change this to a parsing option maybe...
 # my_source.get_fermi_lat_data(spacecraft=True)
-my_source.create_events_file()
+# my_source.create_events_file()
 # my_source.create_config_file()
 my_source.setup_analysis()
 my_source.free_parameter()

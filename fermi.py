@@ -179,6 +179,11 @@ class Source:
         # replace latest catalog here in case
         config['model']['catalogs'] = [os.path.join(os.getenv("OUTPUT_DIR"), "catalogs/gll_psc_v30.fit")]
 
+        # if object is not in 4FGL catalog (but in 3FGL), create and add_source.xml and add it to the catalogs
+        if not self.source_name.startswith("4FGL"):
+            add_file_xml = self.create_source_xml()
+            config['model']['catalogs'].append(add_file_xml)
+
         tmin, tmax = self.get_time_window()
 
         config['selection']['tmin'] = tmin
@@ -198,6 +203,23 @@ class Source:
 
         with open(config_path, 'w+') as stream:
             config = yaml.dump(config, stream, default_flow_style=False)
+
+
+    def create_source_xml(self):
+        xml_path = os.path.join(self.data_dir, "add_source.xml")
+        template_path = os.path.join(os.getenv("MYFERMI_DIR"), "default.xml")
+
+        with open(template_path, 'r') as template:
+            my_xml = template.read()
+
+        my_xml = my_xml.replace("SOURCENAME", self.source_name.replace("3FGLJ", "3FGL J"))
+        my_xml = my_xml.replace("SOURCE_RA", str(self.ra))
+        my_xml = my_xml.replace("SOURCE_DEC", str(self.dec))
+
+        with open(xml_path, 'w+') as final_xml:
+            final_xml.write(my_xml)
+        
+        return xml_path
 
 
 
