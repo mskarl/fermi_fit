@@ -1,0 +1,37 @@
+{
+    // Verwendet IntelliSense zum Ermitteln möglicher Attribute.
+    // Zeigen Sie auf vorhandene Attribute, um die zugehörigen Beschreibungen anzuzeigen.
+    // Weitere Informationen finden Sie unter https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+    
+        {
+            "name": "Python: Aktuelle Datei",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": false
+        }, 
+
+        {
+            "name": "run fit 4FGL_J0545.0+0613",
+            "type": "python",
+            "request": "launch",
+            "program": "/home/martina/postdoc/fermi_fit/run_fit.py",
+            "args": ["--source=50"],
+            "console": "integratedTerminal",
+            "justMyCode": false
+        },
+
+        {
+            "name": "run fit 4FGL_J0103.5+1526",
+            "type": "python",
+            "request": "launch",
+            "program": "/home/martina/postdoc/fermi_fit/run_fit.py",
+            "args": ["--source=0"],
+            "console": "integratedTerminal",
+            "justMyCode": false
+        }
+    ]
+}
