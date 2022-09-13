@@ -198,8 +198,10 @@ class Source:
 
         with open(config_path, "r") as stream:
             config = yaml.safe_load(stream)
+        
+        self.source_name += appendix
 
-        config['selection']['target'] = self.source_name + appendix
+        config['selection']['target'] = self.source_name
 
         with open(config_path, 'w+') as stream:
             config = yaml.dump(config, stream, default_flow_style=False)
@@ -253,8 +255,14 @@ class Source:
             self.gta.free_source("galdiff", pars='norm')
             self.gta.free_source("isodiff", pars='norm')
             if self.source_name:
-                self.gta.free_source(self.source_name, pars=None, free=False)
-                self.gta.free_source(self.source_name, pars=None, free=True)
+                try:
+                    self.gta.free_source(self.source_name, pars=None, free=False)
+                    self.gta.free_source(self.source_name, pars=None, free=True)
+                except:
+                    self.gta.free_source(self.source_name + "c", pars=None, free=False)
+                    self.gta.free_source(self.source_name + "c", pars=None, free=True)
+                    self.source_name += "c"
+
 
 
         self.free_params == True
@@ -271,17 +279,31 @@ class Source:
     
     def calculate_bowtie(self, filename="bowtie.npy"):
         print("calculate bowtie for " + self.source_name, os.path.join(self.working_dir, filename))
-        bowtie = self.gta.bowtie(self.source_name)
+        try:
+            bowtie = self.gta.bowtie(self.source_name)
+        except:
+            bowtie = self.gta.bowtie(self.source_name + "c")
+            self.source_name += "c"
+
+
         np.save(os.path.join(self.working_dir, filename), bowtie)
         return
 
 
     def calculate_sed(self, filename="sed.fits"):
         print("calculate the sed ", os.path.join(self.working_dir, filename))
-        self.gta.sed(self.source_name, outfile=os.path.join(self.working_dir, filename), 
-                    free_radius=self.__get_95_psf(100), free_background=True, 
-                    loge_bins=list(np.arange(np.log10(100),
-                                    np.log10(1000000), 0.5)))
+        try: 
+            self.gta.sed(self.source_name, outfile=os.path.join(self.working_dir, filename), 
+                        free_radius=self.__get_95_psf(100), free_background=True, 
+                        loge_bins=list(np.arange(np.log10(100),
+                                        np.log10(1000000), 0.5)))
+        except:
+            self.gta.sed(self.source_name + "c", outfile=os.path.join(self.working_dir, filename), 
+            free_radius=self.__get_95_psf(100), free_background=True, 
+            loge_bins=list(np.arange(np.log10(100),
+                            np.log10(1000000), 0.5)))
+            self.source_name += "c"
+
         # theo has some more parameter: 
         # loge_bins=list(np.arange(np.log10(args['emin']),
         #                            np.log10(args['emax']), 0.5)),
