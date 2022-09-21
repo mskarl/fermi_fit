@@ -224,17 +224,17 @@ class Source:
         return xml_path
 
 
-
     def setup_analysis(self, config_file="config.yaml"):
 
         # setup the analysis
         config_path = os.path.join(self.data_dir, config_file)
         print("initialize analysis") # TODO change prints to logger?
-        try:
-            self.gta = GTAnalysis(config_path, logging={'verbosity': 3})
-        except:
-            self.update_target_config_file(appendix="c")
-            self.gta = GTAnalysis(config_path, logging={'verbosity': 3})
+        if self.gta is None:
+            try:
+                self.gta = GTAnalysis(config_path, logging={'verbosity': 3})
+            except:
+                self.update_target_config_file(appendix="c")
+                self.gta = GTAnalysis(config_path, logging={'verbosity': 3})
 
         print("setup analysis")
         self.gta.setup()
@@ -269,7 +269,17 @@ class Source:
         return 
 
 
-    def add_power_law_source(self):
+    def add_power_law_source(self, config_file="config.yaml"):
+
+        if self.gta is None:
+            config_path = os.path.join(self.data_dir, config_file)
+
+            try:
+                self.gta = GTAnalysis(config_path, logging={'verbosity': 3})
+            except:
+                self.update_target_config_file(appendix="c")
+                self.gta = GTAnalysis(config_path, logging={'verbosity': 3})
+
         try:
             self.gta.delete_source(self.source_name)
         except:
@@ -277,7 +287,6 @@ class Source:
 
         self.gta.add_source(self.source_name, {"ra" : str(self.ra), "dec" : str(self.dec), "SpectrumType" : "PowerLaw", 
         "SpatialModel" : "PointSource"})
-
 
 
     def fit_llh(self, filename="llh.npy"):

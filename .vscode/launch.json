@@ -32,6 +32,16 @@
             "args": ["--source=0"],
             "console": "integratedTerminal",
             "justMyCode": false
+        },
+
+        {
+            "name": "run fit 4FGL_J0244.7+1316",
+            "type": "python",
+            "request": "launch",
+            "program": "/home/martina/postdoc/fermi_fit/run_fit.py",
+            "args": ["--source=5", "--force_power_law"],
+            "console": "integratedTerminal",
+            "justMyCode": false
         }
     ]
 }
