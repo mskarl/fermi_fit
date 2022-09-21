@@ -269,6 +269,17 @@ class Source:
         return 
 
 
+    def add_power_law_source(self):
+        try:
+            self.gta.delete_source(self.source_name)
+        except:
+            pass
+
+        self.gta.add_source(self.source_name, {"ra" : str(self.ra), "dec" : str(self.dec), "SpectrumType" : "PowerLaw", 
+        "SpatialModel" : "PointSource"})
+
+
+
     def fit_llh(self, filename="llh.npy"):
         self.free_parameter()
         print("fit likelihood ", self.working_dir + filename)

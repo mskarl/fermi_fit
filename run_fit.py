@@ -9,6 +9,8 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--source", default=0, type=int, help="index in master table")
 parser.add_argument("--data_dir", default=None, type=str)
 parser.add_argument("--output_dir", default=None, type=str)
+parser.add_argument("--force_power_law", default=False, type=bool, action="store_true", help="Sometimes the spectral " + \
+                    "type in the catalog is a log parabola. This forces the model to use a power law.")
 
 args = parser.parse_args()
 print("my arguments")
@@ -25,6 +27,9 @@ my_source = fermi.Source(source_name, ra,  dec, data_dir=args.data_dir, output_d
 # my_source.get_fermi_lat_data(spacecraft=True)
 # my_source.create_events_file()
 # my_source.create_config_file()
+if args.force_power_law:
+    my_source.add_power_law_source()
+    
 my_source.setup_analysis()
 my_source.free_parameter()
 my_source.fit_llh()
