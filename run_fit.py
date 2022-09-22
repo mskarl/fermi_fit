@@ -27,10 +27,10 @@ my_source = fermi.Source(source_name, ra,  dec, data_dir=args.data_dir, output_d
 # my_source.get_fermi_lat_data(spacecraft=True)
 # my_source.create_events_file()
 # my_source.create_config_file()
-if args.force_power_law:
-    my_source.add_power_law_source()
 
 my_source.setup_analysis()
+if args.force_power_law:
+    my_source.add_power_law_source()
 my_source.free_parameter()
 my_source.fit_llh()
 my_source.calculate_bowtie()

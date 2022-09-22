@@ -19,7 +19,7 @@
             "type": "python",
             "request": "launch",
             "program": "/home/martina/postdoc/fermi_fit/run_fit.py",
-            "args": ["--source=50"],
+            "args": ["--source=50", "--force_power_law"],
             "console": "integratedTerminal",
             "justMyCode": false
         },

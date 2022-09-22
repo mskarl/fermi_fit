@@ -271,19 +271,20 @@ class Source:
 
     def add_power_law_source(self, config_file="config.yaml"):
 
-        if self.gta is None:
-            config_path = os.path.join(self.data_dir, config_file)
+        # if self.gta is None:
+        #     config_path = os.path.join(self.data_dir, config_file)
 
-            try:
-                self.gta = GTAnalysis(config_path, logging={'verbosity': 3})
-            except:
-                self.update_target_config_file(appendix="c")
-                self.gta = GTAnalysis(config_path, logging={'verbosity': 3})
+        #     try:
+        #         self.gta = GTAnalysis(config_path, logging={'verbosity': 3})
+        #     except:
+        #         self.update_target_config_file(appendix="c")
+        #         self.gta = GTAnalysis(config_path, logging={'verbosity': 3})
 
-        try:
+        if self.source_name in [x["name"] for x in self.gta.roi.sources]:
             self.gta.delete_source(self.source_name)
-        except:
-            pass
+        elif self.source_name + "c" in [x["name"] for x in self.gta.roi.sources]:
+            self.gta.delete_source(self.source_name + "c")
+            self.source_name += "c"
 
         self.gta.add_source(self.source_name, {"ra" : str(self.ra), "dec" : str(self.dec), "SpectrumType" : "PowerLaw", 
         "SpatialModel" : "PointSource"})
