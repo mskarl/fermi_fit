@@ -293,7 +293,7 @@ class Source:
     def fit_llh(self, filename="llh.npy"):
         self.free_parameter()
         print("fit likelihood ", self.working_dir + filename)
-        self.gta.fit(retries=50) # TODO theo has a retries argument here
+        self.gta.fit(retries=50, optimizer='NEWMINUIT')
         self.gta.write_roi(os.path.join(self.working_dir, filename), make_plots=True)
         return
 
