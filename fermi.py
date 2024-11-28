@@ -22,6 +22,7 @@ class Source:
         self.ra = ra
         self.dec = dec
         self.alert_time = alert_time
+        # set the paths to the working directories here. adjust in case
         if not output_dir:
             self.working_dir = os.path.join(os.getenv("OUTPUT_DIR"), self.source_name.replace(" ", ""))
 
@@ -44,10 +45,7 @@ class Source:
         return 
         
 
-    # TODO implement time stuff.. or maybe apply cut later?
     def get_fermi_lat_data(self, spacecraft=True): # from Theo's skript
-
-
 
         def get_download_links(html):
             split = html.decode().split('wget')
@@ -82,10 +80,6 @@ class Source:
         br["timefield"] = "START, END"
         br["shapefield"] = "15"
         br["energyfield"] = "100, 1000000"
-        # radius br["shapefield"]
-        # time br["timefield"], br["timetype"]
-        # we load the spacecraft file separately
-        # br.form.find_control('spacecraft').items[0].selected = False
 
         response = br.submit()
         r_text = response.get_data()
@@ -134,21 +128,6 @@ class Source:
             event_file.write("\n".join(ph_files))
         return
 
-
-    # def get_recent_catalog(self):
-    #     os.system("wget -N -P " + os.path.join(os.getenv("OUTPUT_DIR"), "catalogs") + " )
-    #     return
-
-
-    # def get_latest_diffuse_models(self):  diffuse models are included in the fermi package stuff. this 
-    # might need to be updated. 
-    #     return 
-
-
-#make_cuts()
-
-
-#create_xml_file
 
     def get_time_window(self):
         files = os.listdir(self.data_dir)
@@ -228,7 +207,7 @@ class Source:
 
         # setup the analysis
         config_path = os.path.join(self.data_dir, config_file)
-        print("initialize analysis") # TODO change prints to logger?
+        print("initialize analysis") 
         if self.gta is None:
             try:
                 self.gta = GTAnalysis(config_path, logging={'verbosity': 3})
@@ -249,9 +228,7 @@ class Source:
         # free parameter 
         if not self.free_params:
             print("free parameter")
-            # TODO are these the correct steps? ask paolo
             self.gta.free_sources(distance=self.__get_95_psf(100), minmax_ts=[2, None], exclude=['isodiff', 'galdiff']) 
-            # pars="norm")
             self.gta.free_source("galdiff", pars='norm')
             self.gta.free_source("isodiff", pars='norm')
             if self.source_name:
@@ -270,15 +247,6 @@ class Source:
 
 
     def add_power_law_source(self, config_file="config.yaml"):
-
-        # if self.gta is None:
-        #     config_path = os.path.join(self.data_dir, config_file)
-
-        #     try:
-        #         self.gta = GTAnalysis(config_path, logging={'verbosity': 3})
-        #     except:
-        #         self.update_target_config_file(appendix="c")
-        #         self.gta = GTAnalysis(config_path, logging={'verbosity': 3})
 
         if self.source_name in [x["name"] for x in self.gta.roi.sources]:
             self.gta.delete_source(self.source_name)
@@ -325,12 +293,6 @@ class Source:
                             np.log10(1000000), 0.5)))
             self.source_name += "c"
 
-        # theo has some more parameter: 
-        # loge_bins=list(np.arange(np.log10(args['emin']),
-        #                            np.log10(args['emax']), 0.5)),
-        #             free_pars=free_pars,
-        #             free_radius=args['free_radius'],
-        #             free_background=True
         return
 
 

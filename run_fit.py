@@ -23,7 +23,7 @@ source_name = source_name.replace("_", " ")
 
 my_source = fermi.Source(source_name, ra,  dec, data_dir=args.data_dir, output_dir=args.output_dir)
 
-# get data. change this to a parsing option maybe...
+# get data. 
 # my_source.get_fermi_lat_data(spacecraft=True)
 # my_source.create_events_file()
 # my_source.create_config_file()
