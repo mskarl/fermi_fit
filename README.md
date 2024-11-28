@@ -1,6 +1,6 @@
 # Fitting Fermi data
 
-A wrapper for fitting the fermi data with fermipy. Fermipy needs to be installed, and the latest catalog and spacecraft data should be downloaded. 
+A wrapper for fitting the fermi data with fermipy. Fermipy needs to be installed, and the latest catalog and spacecraft data should be downloaded and saved in folders `catalogs` and `spacecraft` in this directory. 
 
 The `.env` file specifies all relevant paths. Customize as needed. 
 
